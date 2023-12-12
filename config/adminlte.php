@@ -193,7 +193,7 @@ return [
     'classes_content_wrapper' => '',
     'classes_content_header' => '',
     'classes_content' => '',
-    'classes_sidebar' => 'sidebar-dark-primary sidebar-light-primary elevation-4',
+    'classes_sidebar' => ' sidebar-primary elevation-4 ',
     'classes_sidebar_nav' => '',
     'classes_topnav' => 'navbar-white navbar-light',
     'classes_topnav_nav' => 'navbar-expand',
@@ -292,10 +292,19 @@ return [
 
     'menu' => [
         // Navbar items:
-
+        [
+            'type' => 'navbar-item',
+            'text' => 'Inicio',
+            'url' => '/home',
+            'icon' => 'fas fa-regular fa-home',
+            'topnav' => true,
+        ],
 
         // Sidebar items:
 
+        [
+            'header' => 'MENU',
+        ],
         [
             'text'   => 'Búsqueda',
             'search' => true,
@@ -303,7 +312,7 @@ return [
         [
             'text' => 'Inicio',
             'url'  => '/home',
-            'icon' => 'fas fa-regular fa-house',
+            'icon' => 'fas fa-regular fa-home',
         ],
         [
             'text'    => 'Calendario',
@@ -323,7 +332,7 @@ return [
         ],
         [
             'text' => 'Administración',
-            'icon' => ' fa-solid fa-user-gear',
+            'icon' => 'fas fa-solid fa-user-cog',
             'submenu' => [
                     [
                         'text' => 'Usuarios',

@@ -12,6 +12,7 @@ class EventController extends Controller
     {
         $events = Event::all();
 
+
         $formattedEvents = [];
         foreach ($events as $event) {
             $formattedEvents[] = [
@@ -19,14 +20,21 @@ class EventController extends Controller
                 'title' => $event->title,
                 'start' => $event->start,
                 'end' => $event->end,
+                'backgroundColor' => $event->type->color,
+                'tipo' => $event->type->tipo,
+                'tipoId' => $event->type->id,
             ];
         }
 
         return response()->json($formattedEvents);
     }
 
+
+
     public function store(Request $request)
     {
+
+
         $request->validate([
             'title' => 'required',
             'start' => 'required|date',
@@ -38,42 +46,40 @@ class EventController extends Controller
             'start' => $request->input('start'),
             'end' => $request->input('end'),
         ]);
+        $event->type()->associate($request->input('tipo'));
 
         $event->save();
 
-        return response()->json(['message' => 'Event created successfully']);
+        return redirect()->route('home')->with('success','Evento creado con éxito');
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
+
         $request->validate([
             'title' => 'required',
             'start' => 'required|date',
             'end' => 'required|date|after_or_equal:start',
         ]);
 
-        $event = Event::findOrFail($id);
+        $event = Event::findOrFail($request->id);
+        $tipo = TypeEvent::findOrFail($request->tipo);
         $event->title = $request->input('title');
         $event->start = $request->input('start');
         $event->end = $request->input('end');
+        $event->type()->associate($tipo);
         $event->save();
 
-        return response()->json(['message' => 'Event updated successfully']);
+        return redirect()->route('home')->with('success','Evento editado con éxito');
     }
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $event = Event::findOrFail($id);
+        $event = Event::findOrFail($request->id);
         $event->delete();
 
-        return response()->json(['message' => 'Event deleted successfully']);
+        return redirect()->route('home')->with('success','Evento eliminado con éxito');
     }
 
-    public function typeIndex(Request $request){
 
-        $perPage = $request->input('per_page', 10);
-        $tipos = TypeEvent::paginate($perPage);
-        return view('evento.tipo.index', compact('tipos'));
-
-    }
 }

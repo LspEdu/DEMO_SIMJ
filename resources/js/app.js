@@ -6,26 +6,42 @@ import interactionPlugin from '@fullcalendar/interaction';
 
 
 
+
 document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
     var calendar = new Calendar(calendarEl, {
         themeSystem: 'bootstrap',
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
         initialView: 'dayGridMonth',
-        events: '/events',
+        events: '/event/get',
         headerToolbar: {
             left: 'prev,next today',
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay',
         },
         dateClick: function (info) {
+            var fechaFormateada = info.date.toISOString().slice(0, 16);
+            var endFormatted = new Date(info.date);
+            endFormatted.setDate(endFormatted.getDate() + 1);
+            endFormatted = endFormatted.toISOString().slice(0, 16);
             mostrarModal('Agregar Evento', {
-                start: info.dateStr,
-                end: info.dateStr,
+                start: fechaFormateada,
+                end: endFormatted,
+                route: 'c',
             });
         },
         eventClick: function (info) {
-            mostrarModal('Editar Evento', info.event);
+            console.log(info)
+            var start = info.event.start.toISOString().slice(0, 16);
+            var end = info.event.end.toISOString().slice(0, 16);
+            mostrarModal('Editar Evento', {
+                id: info.event.id,
+                title: info.event.title,
+                start: start,
+                end: end,
+                tipo: info.event.extendedProps.tipoId,
+                route: 'edit',
+            });
         },
         selectable: true,
         select: function (info) {
@@ -40,74 +56,48 @@ document.addEventListener('DOMContentLoaded', function () {
     calendar.render();
 
     function mostrarModal(titulo, datosEvento) {
+        console.log(datosEvento)
         // Lógica para mostrar la ventana modal y completar el formulario con datosEvento
         $('#eventModalLabel').text(titulo);
-        $('#title').val(datosEvento.title || '');
-        $('#start').val(datosEvento.start ? datosEvento.start.toISOString().slice(0, -8) : '');
-        $('#end').val(datosEvento.end ? datosEvento.end.toISOString().slice(0, -8) : '');
+        $('#title').val(datosEvento.title);
+        $('#start').val(datosEvento.start);
+        $('#end').val(datosEvento.end );
+        $('#tipo').val(datosEvento.tipo);
+        $('#id').val(datosEvento.id);
+        var action = '';
+        if(datosEvento.route == 'c') action = '/event/create';
+        else action = '/event/update';
+        $('#eventForm').attr("action", action )
+
+
+        $('#btnConfirmarBorrar').on('click', () => {
+            var id = datosEvento.id
+            cerrarModal();
+            abrirConfirmarModal(id);
+        })
 
         // Configuración de los botones del modal
         $('#guardarEvento').off('click').on('click', function () {
             guardarEvento(datosEvento);
             cerrarModal();
-        });
 
-        $('#eliminarEvento').off('click').on('click', function () {
-            eliminarEvento(datosEvento);
-            cerrarModal();
         });
 
         $('#eventModal').modal('show');
+        $('#cerrarModal').on('click', function () {
+            cerrarModal();
+        });
     }
 
     function cerrarModal() {
         $('#eventModal').modal('hide');
     }
+    function abrirConfirmarModal(id) {
+        $('#confirmarBorrar').modal('show');
+        $('#destroyEventId').val(id);
+    };
 
-    function guardarEvento(datosEvento) {
-        // Lógica para guardar el evento en la base de datos
-        // Puedes enviar los datos al servidor mediante una solicitud AJAX
-        // Ejemplo AJAX (requiere jQuery):
-        /*
-        $.ajax({
-            method: 'POST',
-            url: '/events', // Ruta para guardar eventos en el servidor
-            data: {
-                title: $('#title').val(),
-                start: $('#start').val(),
-                end: $('#end').val(),
-            },
-            success: function (response) {
-                // Lógica después de guardar exitosamente
-                console.log(response);
-            },
-            error: function (error) {
-                // Lógica en caso de error
-                console.error(error);
-            }
-        });
-        */
-    }
 
-    function eliminarEvento(datosEvento) {
-        // Lógica para eliminar el evento de la base de datos
-        // Puedes enviar los datos al servidor mediante una solicitud AJAX
-        // Ejemplo AJAX (requiere jQuery):
-        /*
-        $.ajax({
-            method: 'DELETE',
-            url: '/events/' + datosEvento.id, // Ruta para eliminar eventos en el servidor
-            success: function (response) {
-                // Lógica después de eliminar exitosamente
-                console.log(response);
-            },
-            error: function (error) {
-                // Lógica en caso de error
-                console.error(error);
-            }
-        });
-        */
-    }
 });
 
 

@@ -31,7 +31,11 @@ Route::post('/admin/users/create', [UserController::class,'store'])->name('user.
 Route::post('/admin/users/update', [UserController::class,'update'])->name('user.update');
 Route::delete('/admin/users/delete', [UserController::class,'destroy'])->name('user.destroy');
 
+Route::post('/event/create', [EventController::class,'store'])->name('event.create');
+Route::post('/event/update', [EventController::class,'update'])->name('event.update');
+Route::delete('/event/delete', [EventController::class,'destroy'])->name('event.destroy');
 
+Route::get('/event/get', [EventController::class,'index'])->name('event.index');
 
 Route::get('/evento/tipo', [TypeEventController::class,'index'])->name('tipo.show');
 Route::post('/evento/tipo/crear', [TypeEventController::class,'store'])->name('tipo.create');

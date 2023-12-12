@@ -88,7 +88,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <!-- Contenido del formulario para crear usuario -->
+                    <!-- Contenido del formulario para eliminar usuario -->
                     <form id="eliminarUsuarioForm" action="{{ route('user.destroy') }}" method="post">
                         @method('DELETE')
                         @csrf
@@ -118,7 +118,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <!-- Contenido del formulario para crear usuario -->
+                    <!-- Contenido del formulario para editar usuario -->
                     <form id="editarUsuarioForm" action="{{ route('user.update') }}" method="post">
                         @csrf
                         <!-- Campos del formulario -->

@@ -320,7 +320,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Tipo de Eventos',
-                    'url'  => '/calendario/eventos',
+                    'url'  => '/evento/tipo',
                     'icon' => 'fas fa-regular fa-calendar-day',
                 ],
                 [
@@ -342,7 +342,7 @@ return [
             ],
         ],
 
-        
+
     ],
 
     /*

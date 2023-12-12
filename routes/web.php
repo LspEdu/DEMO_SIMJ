@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\TypeEventController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,3 +30,11 @@ Route::get('/admin/users', [UserController::class, 'index'] )->name('users');
 Route::post('/admin/users/create', [UserController::class,'store'])->name('user.create');
 Route::post('/admin/users/update', [UserController::class,'update'])->name('user.update');
 Route::delete('/admin/users/delete', [UserController::class,'destroy'])->name('user.destroy');
+
+
+
+Route::get('/evento/tipo', [TypeEventController::class,'index'])->name('tipo.show');
+Route::post('/evento/tipo/crear', [TypeEventController::class,'store'])->name('tipo.create');
+Route::post('/evento/tipo/update', [TypeEventController::class,'update'])->name('tipo.update');
+Route::delete('/evento/tipo/delete', [TypeEventController::class,'destroy'])->name('tipo.delete');
+
